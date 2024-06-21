@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+      color: aliceblue;
+      font-weight: bold;
+      background-image: url(https://img.freepik.com/free-photo/black-monstera-leaves-background-wallpaper_53876-102420.jpg?t=st=1718965222~exp=1718968822~hmac=d1e18014dd26100a7ca893fb7af6dc6c9d3c1891e669c6f626a679f62eeb4924&w=2000);
+    }
+
+    #slider {
+      width: 300px;
+      height: 10px;
+      background-color: #d7f1f0;
+      border-radius: 5px;
+      position: relative;
+    }
+
+    #slider-thumb {
+      width: 20px;
+      height: 20px;
+      background-color: #468085;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    #value {
+      position: absolute; /* Позиционируем над ползунком */
+      top: -25px; 
+      left: 50%; /* Центрируем по горизонтали */
+      transform: translateX(-50%); /* Доп центрирование */
+      text-align: center;
+      font-size: 16px;
+      font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+    }
+
+    #marks {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 15px;
+      font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+    }
+
+    #marks span {
+      text-align: center;
+    }
+
+    #slider-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background-color: #468085c4; 
+      border-radius: 5px;
+      width: 0; 
+    }
+  </style>
+</head>
+
+<body>
+  <div id="slider">
+    <div id="slider-fill"></div>
+    <div id="slider-thumb"></div>
+    <div id="marks">
+      <span>0</span>
+      <span>20</span>
+      <span>40</span>
+      <span>60</span>
+      <span>80</span>
+      <span>100</span>
+    </div>
+    <div id="value">0</div>  </div>
+
+  <script>
+    const slider = document.getElementById('slider');
+    const sliderThumb = document.getElementById('slider-thumb');
+    const value = document.getElementById('value');
+    const marks = document.getElementById('marks');
+    const sliderFill = document.getElementById('slider-fill');
+
+    let sliderWidth = slider.offsetWidth;
+    let sliderThumbWidth = sliderThumb.offsetWidth;
+    let currentPosition = 0;
+
+    function updatePosition(event) {
+      const mouseX = event.clientX - slider.offsetLeft;
+      const newPosition = Math.max(0, Math.min(mouseX - sliderThumbWidth / 2, sliderWidth - sliderThumbWidth));
+      currentPosition = newPosition;
+      sliderThumb.style.left = newPosition + 'px';
+      value.textContent = Math.round((currentPosition / (sliderWidth - sliderThumbWidth)) * 100);
+      sliderFill.style.width = newPosition + 'px'; 
+    }
+
+    slider.addEventListener('mousedown', function(event) {
+      updatePosition(event);
+      document.addEventListener('mousemove', updatePosition);
+      document.addEventListener('mouseup', function() {
+        document.removeEventListener('mousemove', updatePosition);
+      });
+    });
+  </script>
+
+</body>
+</html>
